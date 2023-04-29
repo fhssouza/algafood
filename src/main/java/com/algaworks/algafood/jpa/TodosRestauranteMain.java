@@ -22,7 +22,8 @@ public class TodosRestauranteMain {
         listaRestaurante = restaurantes.todas();
 
         for (Restaurante restaurant : listaRestaurante) {
-            System.out.println(restaurant.getId() + " " + restaurant.getNome());
+            System.out.printf("%s - %f - %s\n", restaurant.getNome(),
+                    restaurant.getTaxaFrete(), restaurant.getCozinha().getNome());
         }
 
     }
