@@ -30,5 +30,6 @@ public class CadastroRestauranteService {
 
         return restauranteRepository.adicionar(restaurante);
     }
+
 }
 

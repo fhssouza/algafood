@@ -4,6 +4,7 @@ import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,6 @@ public class RestauranteController {
 
     @Autowired
     private CadastroRestauranteService cadastroRestaurante;
-
-
 
     @GetMapping
     public List<Restaurante> listar(){
@@ -47,6 +46,26 @@ public class RestauranteController {
         }catch (EntidadeNaoEncontradaException e){
             return ResponseEntity.badRequest()
                     .body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/{restauranteId}")
+    public ResponseEntity<?> atualizar (@RequestBody Restaurante restaurante, @PathVariable Long restauranteId){
+        try {
+            Restaurante restauranteAtual = restauranteRepository.porId(restauranteId);
+
+            if (restauranteAtual != null) {
+
+                BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+
+                restauranteAtual = cadastroRestaurante.salvar(restauranteAtual);
+                return ResponseEntity.ok(restauranteAtual);
+            }
+
+            return ResponseEntity.notFound().build();
+
+        }catch(EntidadeNaoEncontradaException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
