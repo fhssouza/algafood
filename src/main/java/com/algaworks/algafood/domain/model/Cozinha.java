@@ -20,8 +20,8 @@ public class Cozinha {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "observacao", nullable = false)
-	private Integer descricao;
+//	@Column(name = "observacao", nullable = false)
+//	private Integer descricao;
 
 	@Column(nullable = false)
 	private String nome;
