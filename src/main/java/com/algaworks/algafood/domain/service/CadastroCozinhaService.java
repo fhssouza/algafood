@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CadastroCozinhaService {
@@ -26,6 +27,7 @@ public class CadastroCozinhaService {
             cozinhaRepository.deleteById(cozinhaId);
 
         }catch (EmptyResultDataAccessException e){
+
           throw new EntidadeNaoEncontradaException(
                   String.format("Não existe um cadastro de cozinha com código %d", cozinhaId));
 
