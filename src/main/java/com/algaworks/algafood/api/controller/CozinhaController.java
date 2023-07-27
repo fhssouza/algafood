@@ -32,14 +32,8 @@ public class CozinhaController {
     }
 
     @GetMapping(value = "/{cozinhaid}")
-    public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaid) {
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaid);
-
-        if (cozinha.isPresent()){
-            return ResponseEntity.ok(cozinha.get());
-        }
-
-        return ResponseEntity.notFound().build();
+    public Cozinha buscar(@PathVariable Long cozinhaid) {
+        return cadastroCozinha.buscarOuFalhar(cozinhaid);
     }
 
     @PostMapping
@@ -49,33 +43,14 @@ public class CozinhaController {
     }
 
     @PutMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha){
-        Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(cozinhaId);
+    public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha){
+        Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
 
-        if (cozinhaAtual.isPresent()) {
-//        cozinhaAtual.setNome(cozinha.getNome());
-            BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id"); //Copias as informações entre as entidades.
+        BeanUtils.copyProperties(cozinha, cozinhaAtual, "id"); //Copias as informações entre as entidades.
 
-            Cozinha cozinhaSalva = cadastroCozinha.salvar(cozinhaAtual.get());
-            return ResponseEntity.ok(cozinhaAtual.get());
-        }
-        return ResponseEntity.notFound().build();
+        return cadastroCozinha.salvar(cozinhaAtual);
     }
 
-//    @DeleteMapping("/{cozinhaId}")
-//    public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId){
-//        try {
-//            cadastroCozinha.excluir(cozinhaId);
-//
-//            return ResponseEntity.noContent().build();
-//
-//        }catch (EntidadeNaoEncontradaException e){
-//            return ResponseEntity.notFound().build();
-//
-//        } catch (EntidadeEmUsoException e){
-//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//        }
-//    }
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cozinhaId){
